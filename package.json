@@ -1,0 +1,20 @@
+{
+  "name": "media-view",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-ui": "browserify -t [ babelify --presets [ react ] ] ./client/src/app.jsx -o ./client/dist/bundle.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "jade": "^1.11.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  }
+}
