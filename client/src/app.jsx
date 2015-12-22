@@ -1,7 +1,19 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Bacon from 'baconjs'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import Main from './components/main'
+import Streams from './streams'
 
-ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('app')
-);
+injectTapEventPlugin();
+
+const appState = Bacon.combineTemplate({
+  dirs: Streams.dirs,
+  currentPath: Streams.currentPath
+});
+
+appState.onValue((state) => {
+  ReactDOM.render(<Main {...state} />, document.getElementById('app'));
+});
+
+Streams.currentPath.push('/');

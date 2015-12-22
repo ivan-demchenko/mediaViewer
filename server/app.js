@@ -12,7 +12,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({limit: '50mb'}));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../client')));
+app.use('/photo', express.static(path.join(__dirname, '../.cache')));
 
 var server = app.listen(3000, function() {
   var host = server.address().address;
