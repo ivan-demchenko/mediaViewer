@@ -7,18 +7,35 @@ import IconButton from 'material-ui/lib/icon-button'
 import {NavigationArrowBack} from 'material-ui/lib/svg-icons'
 import DirListItem from './dir-list-item'
 import FileListItem from './file-list-item'
+import Dialog from 'material-ui/lib/dialog'
 import Streams from '../streams'
 
 export default React.createClass({
 
-  handleItemTap: function(dir) {
+  getInitialState: function() {
+    return {
+      imageDialogOpen: false,
+      imageToPreview: ''
+    }
+  },
+
+  handleDirTap: function(dir) {
     Streams.currentPath.push(this.props.currentPath + dir.fileName + '/')
+  },
+
+  handleFileTap: function(dir) {
+    var imageToPreview = '/preview' + dir.filePath;
+    this.setState({ imageDialogOpen: true, imageToPreview: imageToPreview });
   },
 
   handleBackBtn: function() {
     var ops = this.props.currentPath.split('/');
     var backPath = R.compose(R.join('/'), R.take(ops.length - 2))(ops) + '/';
     Streams.currentPath.push(backPath);
+  },
+
+  previewDialogRequestedClose: function() {
+    this.setState({ imageDialogOpen: false });
   },
 
   render: function() {
@@ -38,13 +55,23 @@ export default React.createClass({
                   key={i}
                   label={dir.fileName}
                   avatarPath={dir.filePath}
-                  tapHandler={this.handleItemTap.bind(this, dir)} />
+                  tapHandler={this.handleFileTap.bind(this, dir)} />
               : <DirListItem
                   key={i}
                   label={dir.fileName}
-                  tapHandler={this.handleItemTap.bind(this, dir)} />
+                  tapHandler={this.handleDirTap.bind(this, dir)} />
           }.bind(this))}
         </List>
+        <Dialog
+          title="Image preview"
+          actions={[{ text: 'Close', ref: 'close', onTouchTap: this.previewDialogRequestedClose }]}
+          actionFocus="close"
+          open={this.state.imageDialogOpen}
+          autoDetectWindowHeight={true}
+          autoScrollBodyContent={true}
+          onRequestClose={this.previewDialogRequestedClose}>
+          <img src={this.state.imageToPreview} />
+        </Dialog>
       </div>
     );
   },
