@@ -4,7 +4,7 @@ import {FileFolder} from 'material-ui/lib/svg-icons'
 
 export default React.createClass({
 
-  handleTap: function(e) {
+  handleTap: function() {
     this.props.tapHandler();
   },
 
@@ -12,8 +12,8 @@ export default React.createClass({
     return (
       <ListItem
         primaryText={this.props.label}
-        onTouchTap={this.handleTap}
-        leftIcon={<FileFolder />} />
+        leftIcon={<FileFolder />}
+        onTouchTap={this.handleTap} />
     );
   },
 

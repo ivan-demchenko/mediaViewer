@@ -4,17 +4,10 @@ var fs = require('fs');
 
 function getEntityIcon(reqPath) {
   return function(fileName) {
-    if (fileName.match(/.+\.jpg|\.jpeg/i)) {
-      return {
-        isFile: true,
-        fileName: fileName,
-        filePath: path.join(reqPath, fileName)
-      }
-    } else {
-      return {
-        isFile: false,
-        fileName: fileName
-      }
+    return {
+      isFile: fileName.match(/.+\.jpg|\.jpeg/i),
+      fileName: fileName,
+      filePath: path.join(reqPath, fileName)
     }
   };
 }

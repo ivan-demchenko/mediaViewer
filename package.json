@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-ui": "browserify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx"
+    "bundle": "browserify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx",
+    "watch": "watchify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx"
   },
   "author": "",
   "license": "ISC",

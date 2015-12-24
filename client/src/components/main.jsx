@@ -9,6 +9,8 @@ import DirListItem from './dir-list-item'
 import FileListItem from './file-list-item'
 import Dialog from 'material-ui/lib/dialog'
 import Streams from '../streams'
+import ListEntity from './list-entity'
+import ImageViever from './image-viever'
 
 export default React.createClass({
 
@@ -36,6 +38,8 @@ export default React.createClass({
 
   previewDialogRequestedClose: function() {
     this.setState({ imageDialogOpen: false });
+  closePreviewRequested: function() {
+    Bus.imageToPreview.push(null);
   },
 
   render: function() {
@@ -60,6 +64,9 @@ export default React.createClass({
                   key={i}
                   label={dir.fileName}
                   tapHandler={this.handleDirTap.bind(this, dir)} />
+          {this.props.listing.map(function(itm, idx) {
+            return <ListEntity key={idx} entity={itm}
+              tapHandler={this.handleEntityTap.bind(this, idx)} />
           }.bind(this))}
         </List>
         <Dialog
@@ -72,6 +79,11 @@ export default React.createClass({
           onRequestClose={this.previewDialogRequestedClose}>
           <img src={this.state.imageToPreview} />
         </Dialog>
+        { this.props.imageToPreview
+          ? <ImageViever
+              imgSrc={'/preview' + this.props.imageToPreview}
+              closeRequested={this.closePreviewRequested} />
+          : null }
       </div>
     );
   },

@@ -4,7 +4,7 @@ import Avatar from 'material-ui/lib/avatar'
 
 export default React.createClass({
 
-  handleTap: function(e) {
+  handleTap: function() {
     this.props.tapHandler();
   },
 
