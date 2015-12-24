@@ -3,8 +3,10 @@ import R from 'ramda'
 import S from './service'
 
 const currPathBus = new Bacon.Bus();
+const imageToPreview = new Bacon.Bus();
 
 export default {
-  dirs: currPathBus.flatMap(R.compose(Bacon.fromPromise, S.getPath)),
-  currentPath: currPathBus
+  listing: currPathBus.flatMap(R.compose(Bacon.fromPromise, S.getPath)),
+  currentPath: currPathBus,
+  imageToPreview: imageToPreview
 }

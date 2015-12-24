@@ -5,9 +5,6 @@ import AppBar from 'material-ui/lib/app-bar'
 import List from 'material-ui/lib/lists/list'
 import IconButton from 'material-ui/lib/icon-button'
 import {NavigationArrowBack} from 'material-ui/lib/svg-icons'
-import DirListItem from './dir-list-item'
-import FileListItem from './file-list-item'
-import Dialog from 'material-ui/lib/dialog'
 import Streams from '../streams'
 import ListEntity from './list-entity'
 import ImageViever from './image-viever'
@@ -21,13 +18,12 @@ export default React.createClass({
     }
   },
 
-  handleDirTap: function(dir) {
-    Streams.currentPath.push(this.props.currentPath + dir.fileName + '/')
-  },
-
-  handleFileTap: function(dir) {
-    var imageToPreview = '/preview' + dir.filePath;
-    this.setState({ imageDialogOpen: true, imageToPreview: imageToPreview });
+  handleEntityTap: function(entity) {
+    if (entity.isFile) {
+      Streams.imageToPreview.push('/preview' + entity.filePath);
+    } else {
+      Streams.currentPath.push(entity.filePath + '/')
+    }
   },
 
   handleBackBtn: function() {
@@ -36,10 +32,8 @@ export default React.createClass({
     Streams.currentPath.push(backPath);
   },
 
-  previewDialogRequestedClose: function() {
-    this.setState({ imageDialogOpen: false });
   closePreviewRequested: function() {
-    Bus.imageToPreview.push(null);
+    Streams.imageToPreview.push(null);
   },
 
   render: function() {
@@ -53,35 +47,14 @@ export default React.createClass({
             </IconButton>
           } />
         <List>
-          {this.props.dirs.map(function(dir, i) {
-            return dir.isFile
-              ? <FileListItem
-                  key={i}
-                  label={dir.fileName}
-                  avatarPath={dir.filePath}
-                  tapHandler={this.handleFileTap.bind(this, dir)} />
-              : <DirListItem
-                  key={i}
-                  label={dir.fileName}
-                  tapHandler={this.handleDirTap.bind(this, dir)} />
-          {this.props.listing.map(function(itm, idx) {
-            return <ListEntity key={idx} entity={itm}
-              tapHandler={this.handleEntityTap.bind(this, idx)} />
+          {this.props.listing.map(function(entity, idx) {
+            return <ListEntity key={idx} entity={entity}
+              tapHandler={this.handleEntityTap.bind(this, entity)} />
           }.bind(this))}
         </List>
-        <Dialog
-          title="Image preview"
-          actions={[{ text: 'Close', ref: 'close', onTouchTap: this.previewDialogRequestedClose }]}
-          actionFocus="close"
-          open={this.state.imageDialogOpen}
-          autoDetectWindowHeight={true}
-          autoScrollBodyContent={true}
-          onRequestClose={this.previewDialogRequestedClose}>
-          <img src={this.state.imageToPreview} />
-        </Dialog>
         { this.props.imageToPreview
           ? <ImageViever
-              imgSrc={'/preview' + this.props.imageToPreview}
+              imgSrc={this.props.imageToPreview}
               closeRequested={this.closePreviewRequested} />
           : null }
       </div>

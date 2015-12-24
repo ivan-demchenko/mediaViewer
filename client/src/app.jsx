@@ -8,8 +8,9 @@ import Streams from './streams'
 injectTapEventPlugin();
 
 const appState = Bacon.combineTemplate({
-  dirs: Streams.dirs,
-  currentPath: Streams.currentPath
+  listing: Streams.listing,
+  currentPath: Streams.currentPath,
+  imageToPreview: Streams.imageToPreview.startWith(null)
 });
 
 appState.onValue((state) => {
