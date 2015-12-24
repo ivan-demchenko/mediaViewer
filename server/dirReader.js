@@ -1,6 +1,7 @@
 var config = require('./config.json');
 var path = require('path');
 var fs = require('fs');
+var debug = require('debug')('dirReader');
 
 function getEntityIcon(reqPath) {
   return function(fileName) {
@@ -15,6 +16,7 @@ function getEntityIcon(reqPath) {
 module.exports = {
   readDir: function(reqPath, cb) {
     var fullPath = path.join(config.rootDir, reqPath);
+    debug('read path %s', fullPath);
 
     fs.readdir(fullPath, function(err, data) {
       if (err) return cb(err);

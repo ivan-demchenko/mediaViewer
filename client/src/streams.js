@@ -11,7 +11,7 @@ const escKey = globalKeyUp.filter(27);
 imageToPreview.plug(escKey.map(null));
 
 export default {
-  listing: currPathBus.flatMap(R.compose(Bacon.fromPromise, S.getPath)),
+  listing: currPathBus.map(x => encodeURIComponent(x)).flatMap(R.compose(Bacon.fromPromise, S.getPath)),
   currentPath: currPathBus,
   imageToPreview: imageToPreview
 }
