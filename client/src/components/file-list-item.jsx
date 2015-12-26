@@ -14,7 +14,7 @@ export default React.createClass({
         primaryText={this.props.label}
         onTouchTap={this.handleTap}
         leftAvatar={
-          <Avatar src={'/thumb' + this.props.avatarPath} />
+          <Avatar src={'/photo?type=thumb&path=' + encodeURIComponent(this.props.avatarPath)} />
         } />
     );
   },

@@ -20,7 +20,7 @@ export default React.createClass({
 
   handleEntityTap: function(entity) {
     if (entity.isFile) {
-      Streams.imageToPreview.push('/preview' + entity.filePath);
+      Streams.imageToPreview.push('/photo?type=preview&path=' + encodeURIComponent(entity.filePath));
     } else {
       Streams.currentPath.push(entity.filePath + '/')
     }

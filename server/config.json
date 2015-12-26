@@ -1,4 +1,14 @@
 {
   "rootDir": "/Users",
-  "cacheDir": ".cache/"
+  "cacheDir": ".cache/",
+  "generatedImages": {
+    "thumb": {
+      "w": 50,
+      "h": 50
+    },
+    "preview": {
+      "w": 1000,
+      "h": 1000
+    }
+  }
 }

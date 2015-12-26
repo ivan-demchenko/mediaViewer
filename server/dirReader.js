@@ -1,27 +1,28 @@
 var config = require('./config.json');
 var path = require('path');
 var fs = require('fs');
+var Q = require('q');
+var R = require('ramda');
 var debug = require('debug')('dirReader');
 
-function getEntityIcon(reqPath) {
-  return function(fileName) {
-    return {
-      isFile: fileName.match(/.+\.jpg|\.jpeg/i),
-      fileName: fileName,
-      filePath: path.join(reqPath, fileName)
-    }
+var getEntityDescriptor = R.curry(function(reqPath, fileName) {
+  return {
+    isFile: fileName.match(/.+\.jpg|\.jpeg/i),
+    fileName: fileName,
+    filePath: path.join(reqPath, fileName)
   };
-}
+});
+var transformListing = R.curry(function(reqPath, listing) {
+  var xform = R.compose(
+    R.filter(R.compose(R.not, R.test(/^\./))),
+    R.map(getEntityDescriptor(reqPath))
+  );
+  return R.into([], xform, listing);
+});
 
 module.exports = {
-  readDir: function(reqPath, cb) {
+  readDir: function(reqPath) {
     var fullPath = path.join(config.rootDir, reqPath);
-    debug('read path %s', fullPath);
-
-    fs.readdir(fullPath, function(err, data) {
-      if (err) return cb(err);
-      cb(null, data.map(getEntityIcon(reqPath)));
-    });
-
+    return Q.nfcall(fs.readdir, fullPath).then(transformListing(reqPath));
   }
 };

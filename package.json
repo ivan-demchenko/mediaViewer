@@ -4,8 +4,7 @@
   "description": "Web interface for viewing media",
   "main": "server/app.js",
   "scripts": {
-    "bundle": "browserify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx",
-    "watch": "watchify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx"
+    "bundle": "browserify ./client/src/app.jsx -o ./client/dist/bundle.js -t [ babelify --presets [ es2015 react ] ] --extension=.jsx"
   },
   "author": "Ivan Demchenko <raqy.style@gmail.com>",
   "license": "MIT",
@@ -16,11 +15,9 @@
     "body-parser": "^1.14.2",
     "browserify": "^12.0.1",
     "debug": "^2.2.0",
-    "easyimage": "^2.1.0",
     "express": "^4.13.3",
     "jade": "^1.11.0",
     "material-ui": "^0.13.4",
-    "mkdirp": "^0.5.1",
     "morgan": "^1.6.1",
     "q": "^1.4.1",
     "ramda": "^0.18.0",
