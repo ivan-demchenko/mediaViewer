@@ -12,17 +12,14 @@ import ImageViever from './image-viever'
 export default React.createClass({
 
   getInitialState: function() {
-    return {
-      imageDialogOpen: false,
-      imageToPreview: ''
-    }
+    return { imageToPreview: '' };
   },
 
   handleEntityTap: function(entity) {
     if (entity.isFile) {
       Streams.imageToPreview.push('/photo?type=preview&path=' + encodeURIComponent(entity.filePath));
     } else {
-      Streams.currentPath.push(entity.filePath + '/')
+      Streams.currentPath.push(entity.filePath + '/');
     }
   },
 

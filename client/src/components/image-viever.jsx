@@ -7,7 +7,7 @@ export default React.createClass({
     return(
       <div onClick={this.props.closeRequested} className="image-viever">
         <header className="image-viever__header">
-          {R.compose(R.last, R.split('/'))(this.props.imgSrc)}
+          {R.compose(R.last, R.split('/'), decodeURIComponent)(this.props.imgSrc)}
         </header>
         <img src={this.props.imgSrc} className="image-viever__image" />
       </div>
