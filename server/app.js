@@ -4,6 +4,12 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var morgan = require('morgan');
 
+var config = require('../config.json');
+if (!config) {
+  console.log('Error: config file is missing!');
+  return;
+}
+
 var app = express();
 
 app.set('view engine', 'jade');
