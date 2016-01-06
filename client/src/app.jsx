@@ -1,20 +1,22 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import Bacon from 'baconjs'
+import { render } from 'react-dom'
+import { Router, Route, Link, browserHistory, IndexRoute } from 'react-router'
+
+import Common from './common/common'
+import Home from './home/home'
+import About from './about/about'
+import NoMatch from './no-match/no-match'
+
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import Main from './components/main'
-import Streams from './streams'
 
 injectTapEventPlugin();
 
-const appState = Bacon.combineTemplate({
-  listing: Streams.listing,
-  currentPath: Streams.currentPath,
-  imageToPreview: Streams.imageToPreview.startWith(null)
-});
-
-appState.onValue((state) => {
-  ReactDOM.render(<Main {...state} />, document.getElementById('app'));
-});
-
-Streams.currentPath.push('/');
+render((
+  <Router history={browserHistory}>
+    <Route path="/" component={Common}>
+      <IndexRoute component={Home} />
+      <Route path="about" component={About}/>
+      <Route path="*" component={NoMatch}/>
+    </Route>
+  </Router>
+), document.getElementById('app'))

@@ -1,10 +1,7 @@
 import React from 'react'
 import R from 'ramda'
 import Service from '../service'
-import AppBar from 'material-ui/lib/app-bar'
 import List from 'material-ui/lib/lists/list'
-import IconButton from 'material-ui/lib/icon-button'
-import {NavigationArrowBack} from 'material-ui/lib/svg-icons'
 import Streams from '../streams'
 import ListEntity from './list-entity'
 import ImageViever from './image-viever'
@@ -36,13 +33,6 @@ export default React.createClass({
   render: function() {
     return (
       <div>
-        <AppBar
-          title={this.props.currentPath}
-          iconElementLeft={
-            <IconButton onTouchTap={this.handleBackBtn}>
-              <NavigationArrowBack />
-            </IconButton>
-          } />
         <List>
           {this.props.listing.map(function(entity, idx) {
             return <ListEntity key={idx} entity={entity}

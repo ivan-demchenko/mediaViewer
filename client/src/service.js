@@ -1,3 +1,6 @@
 export default {
-  getPath: (p) => fetch('/ls?path=' + p).then((res) => res.json())
+  getPath: (base, path) => {
+    return fetch(`/ls?basepath=${base}&path=${path}`)
+      .then((res) => res.json());
+  }
 };
