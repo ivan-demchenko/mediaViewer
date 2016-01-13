@@ -11,7 +11,7 @@ const getEntityDescriptor = R.curry((fullPath, fileName) => {
   return {
     isFile: fileName.match(/.+\.jpg|\.jpeg/i),
     fileName: fileName,
-    filePath: path.join(fullPath, fileName)
+    filePath: fullPath
   };
 });
 
@@ -23,7 +23,6 @@ const filesListToDescrList = R.curry((fullPath, listing) => {
   return R.into([], transducer, listing);
 });
 
-module.exports = (basePath, reqPath) => {
-  var fullPath = path.join(basePath, reqPath);
-  return Q.nfcall(fs.readdir, fullPath).then(filesListToDescrList(fullPath));
+module.exports = (reqPath) => {
+  return Q.nfcall(fs.readdir, reqPath).then(filesListToDescrList(reqPath));
 };

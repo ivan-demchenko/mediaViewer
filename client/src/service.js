@@ -1,6 +1,15 @@
+import R from 'ramda';
+
+const toJson = R.invoker(0, 'json');
+
 export default {
-  getPath: (base, path) => {
-    return fetch(`/ls?basepath=${base}&path=${path}`)
-      .then((res) => res.json());
+
+  getHomeItems: () => {
+    return fetch(`/home-items`).then(toJson);
+  },
+
+  getPath: (path) => {
+    return fetch(`/ls?path=${path}`).then(toJson);
   }
+
 };
