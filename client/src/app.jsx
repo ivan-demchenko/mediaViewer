@@ -18,7 +18,7 @@ render((
   <Router history={history}>
     <Route path="/" component={Common}>
       <IndexRoute component={Home} />
-      <Route path="/ls" component={Listing} dataStream={streams.listing} />
+      <Route path="/ls" component={Listing} />
       <Route path="/about" component={About} />
       <Route path="*" component={NoMatch} />
     </Route>

@@ -1,10 +1,12 @@
 import React from 'react';
+import B from 'baconjs';
 import R from 'ramda';
 import Service from '../service';
 import List from 'material-ui/lib/lists/list';
 import Streams from '../streams';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
+import history from '../history';
 
 export default React.createClass({
 
@@ -12,14 +14,17 @@ export default React.createClass({
     return {
       imageToPreview: null,
       files: [],
-      path: {}
     };
   },
 
+  setFilesList: function(data) {
+    this.setState({ files: data });
+  },
+
   componentDidMount: function() {
-    this.props.route.dataStream.onValue(function(val) {
-      this.setState({ files: val.files, path: val.path });
-    }.bind(this));
+    history.listen(location => {
+      Service.getPath(location.query.path).then(this.setFilesList);
+    });
   },
 
   handleEntityTap: function(entity) {

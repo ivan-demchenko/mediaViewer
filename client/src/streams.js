@@ -11,21 +11,15 @@ const escKey = globalKeyUp.filter(27);
 imageToPreview.plug(escKey.map(null));
 
 const pathBus = new B.Bus();
-const fetchedListing = pathBus.flatMap(R.compose(B.fromPromise, S.getPath));
-const pathAndListing = B.combineTemplate({
-  path: pathBus,
-  files: fetchedListing,
-});
-pathAndListing.map(R.identity).onValue(function(combined) {
+pathBus.map(R.identity).onValue(function(path) {
   history.push({
     pathname: '/ls',
-    search: buildPath([['path', combined.path]]),
+    search: buildPath([['path', path]]),
   });
 });
 
 export default {
   escKey: escKey,
-  listing: pathAndListing,
   pathBus: pathBus,
   imageToPreview: imageToPreview,
 };
