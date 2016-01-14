@@ -25,11 +25,11 @@ export default React.createClass({
       key={Math.random()}
       primaryText={i.label}
       onTouchTap={this.navigate.bind(this, i)}
-      secondaryText={i.basePath}
-    />);
+      secondaryText={i.basePath}/>
+    );
 
-    return ( <List>{ itemToListItems(this.state.items) }</List> );
+    return (<List>{ itemToListItems(this.state.items) }</List>);
 
-  }
+  },
 
 });

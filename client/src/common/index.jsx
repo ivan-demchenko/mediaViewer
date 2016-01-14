@@ -9,22 +9,18 @@ export default React.createClass({
   },
 
   toggleMenu: function() {
-    this.setState({
-      menuOpened: !this.state.menuOpened
-    });
+    this.setState({ menuOpened: !this.state.menuOpened });
   },
 
   setLeftNavState: function(opened) {
-    this.setState({
-      menuOpened: opened
-    });
+    this.setState({ menuOpened: opened });
   },
 
   render: function() {
     return (
       <div>
         <AppHeader toggleMenuFn={this.toggleMenu} />
-        <LeftMenu menuOpened={this.state.menuOpened} setLeftmenuState={this.setLeftNavState} />
+        <LeftMenu menuOpened={this.state.menuOpened} setLeftMenuState={this.setLeftNavState} />
         {this.props.children}
       </div>
     );
