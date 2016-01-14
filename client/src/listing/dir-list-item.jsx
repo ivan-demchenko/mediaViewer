@@ -1,6 +1,8 @@
-import React from 'react'
-import ListItem from 'material-ui/lib/lists/list-item'
-import {FileFolder} from 'material-ui/lib/svg-icons'
+'use strict';
+
+import React from 'react';
+import ListItem from 'material-ui/lib/lists/list-item';
+import {FileFolder} from 'material-ui/lib/svg-icons';
 
 export default React.createClass({
 

@@ -1,19 +1,19 @@
 import React from 'react';
 import B from 'baconjs';
 import R from 'ramda';
-import Service from '../service';
 import List from 'material-ui/lib/lists/list';
+import Service from '../service';
 import Streams from '../streams';
+import history from '../history';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
-import history from '../history';
 
 export default React.createClass({
 
   getInitialState: function() {
     return {
       imageToPreview: null,
-      files: [],
+      files: null,
     };
   },
 
@@ -21,15 +21,20 @@ export default React.createClass({
     this.setState({ files: data });
   },
 
+  setImage: function(data) {
+    this.setState({ imageToPreview: data });
+  },
+
   componentDidMount: function() {
     history.listen(location => {
       Service.getPath(location.query.path).then(this.setFilesList);
     });
+    Streams.imageToPreview.onValue(this.setImage);
   },
 
   handleEntityTap: function(entity) {
     if (entity.isFile) {
-      Streams.imageToPreview.push(entity.fileName);
+      Streams.imageToPreview.push('/api/photo?type=preview&path=' + entity.filePath + entity.fileName);
     } else {
       Streams.pathBus.push(entity.filePath + entity.fileName + '/');
     }
@@ -54,7 +59,7 @@ export default React.createClass({
 
     return (
       <div>
-        <List>{ this.state.files.length ? mapFilesToListItems(this.state.files) : null }</List>
+        <List>{ this.state.files ? mapFilesToListItems(this.state.files) : null }</List>
         { this.showImageToPreview() }
       </div>
     );

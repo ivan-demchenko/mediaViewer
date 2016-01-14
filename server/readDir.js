@@ -9,7 +9,7 @@ const debug = require('debug')('dirReader');
 
 const getEntityDescriptor = R.curry((fullPath, fileName) => {
   return {
-    isFile: fileName.match(/.+\.jpg|\.jpeg/i),
+    isFile: fileName.match(/.+\.jpg|\.jpeg/i) !== null,
     fileName: fileName,
     filePath: fullPath
   };
