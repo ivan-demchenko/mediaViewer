@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const debug = require('debug')('routes:photo');
 const helpers = require('../helpers');

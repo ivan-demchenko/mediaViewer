@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const config = require('../config.json');
 const path = require('path');
@@ -10,7 +10,10 @@ const debug = require('debug')('helper');
 const dummyImagePath = path.join(__dirname, '..', 'public/dummy.jpg');
 
 const getCachedPath = R.curry((type, reqPath) => {
-  return Q(path.join(config.cacheDir, type, config.rootDir, reqPath));
+  debug(`getCachedPath :: type: %s, reqPath: %s`, type, reqPath);
+  debug(`config.cacheRootDir: %s`, config.cacheRootDir);
+
+  return Q(path.join(config.cacheRootDir, type, reqPath));
 });
 
 const checkCachedFileExists = R.curry(function(filePath) {

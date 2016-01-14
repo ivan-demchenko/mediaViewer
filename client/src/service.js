@@ -10,6 +10,6 @@ export default {
 
   getPath: (path) => {
     return fetch(`/ls?path=${path}`).then(toJson);
-  }
+  },
 
 };

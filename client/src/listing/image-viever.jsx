@@ -1,10 +1,10 @@
-import React from 'react'
-import R from 'ramda'
+import React from 'react';
+import R from 'ramda';
 
 export default React.createClass({
 
   render: function() {
-    return(
+    return (
       <div onClick={this.props.closeRequested} className="image-viever">
         <header className="image-viever__header">
           {R.compose(R.last, R.split('/'), decodeURIComponent)(this.props.imgSrc)}
@@ -12,6 +12,6 @@ export default React.createClass({
         <img src={this.props.imgSrc} className="image-viever__image" />
       </div>
     );
-  }
+  },
 
 });

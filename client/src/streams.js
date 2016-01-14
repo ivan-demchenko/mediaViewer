@@ -14,12 +14,12 @@ const pathBus = new B.Bus();
 const fetchedListing = pathBus.flatMap(R.compose(B.fromPromise, S.getPath));
 const pathAndListing = B.combineTemplate({
   path: pathBus,
-  files: fetchedListing
+  files: fetchedListing,
 });
 pathAndListing.map(R.identity).onValue(function(combined) {
   history.push({
     pathname: '/ls',
-    search: buildPath([ ['path', combined.path] ])
+    search: buildPath([['path', combined.path]]),
   });
 });
 
@@ -27,5 +27,5 @@ export default {
   escKey: escKey,
   listing: pathAndListing,
   pathBus: pathBus,
-  imageToPreview: imageToPreview
+  imageToPreview: imageToPreview,
 };
