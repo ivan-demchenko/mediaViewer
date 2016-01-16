@@ -51,8 +51,8 @@ export default React.createClass({
 
   render: function() {
     var mapFilesToListItems = function(items) {
-      return items.map(function(item, idx) {
-        return (<ListEntity key={idx} entity={item} tapHandler={this.handleEntityTap.bind(this, item)} />);
+      return items.map(function(x, i) {
+        return (<ListEntity key={i} entity={x} tapHandler={this.handleEntityTap.bind(this, x)} />);
       }.bind(this));
     }.bind(this);
 

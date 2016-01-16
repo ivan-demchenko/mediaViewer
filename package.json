@@ -4,7 +4,8 @@
   "description": "Web interface for viewing media",
   "main": "server/app.js",
   "scripts": {
-    "bundle": "node_modules/webpack/bin/webpack.js"
+    "bundle": "node_modules/webpack/bin/webpack.js",
+    "watch": "node_modules/webpack/bin/webpack.js --progress --colors --watch"
   },
   "author": "Ivan Demchenko <raqy.style@gmail.com>",
   "license": "MIT",
