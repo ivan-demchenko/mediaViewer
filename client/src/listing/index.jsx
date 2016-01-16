@@ -4,7 +4,7 @@ import R from 'ramda';
 import List from 'material-ui/lib/lists/list';
 import Service from '../service';
 import Streams from '../streams';
-import history from '../history';
+import history from '../app-history';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
 
@@ -14,8 +14,13 @@ export default React.createClass({
     return { imageToPreview: null, files: null };
   },
 
-  setFilesList: R.compose(this.setState, R.objOf('files')),
-  setImage:     R.compose(this.setState, R.objOf('imageToPreview')),
+  setFilesList: function(files) {
+    this.setState(R.objOf('files', files));
+  },
+
+  setImage: function(img) {
+    this.setState(R.objOf('imageToPreview', img));
+  },
 
   fetchFiles: function(path) {
     Service.getPath(path).then(this.setFilesList);
@@ -46,8 +51,8 @@ export default React.createClass({
 
   render: function() {
     var mapFilesToListItems = function(items) {
-      return items.map(function(item, idx) {
-        return (<ListEntity key={idx} entity={item} tapHandler={this.handleEntityTap.bind(this, item)} />);
+      return items.map(function(x, i) {
+        return (<ListEntity key={i} entity={x} tapHandler={this.handleEntityTap.bind(this, x)} />);
       }.bind(this));
     }.bind(this);
 
