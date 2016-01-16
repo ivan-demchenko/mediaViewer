@@ -11,24 +11,18 @@ import ImageViever from './image-viever';
 export default React.createClass({
 
   getInitialState: function() {
-    return {
-      imageToPreview: null,
-      files: null,
-    };
+    return { imageToPreview: null, files: null };
   },
 
-  setFilesList: function(data) {
-    this.setState({ files: data });
-  },
+  setFilesList: R.compose(this.setState, R.objOf('files')),
+  setImage:     R.compose(this.setState, R.objOf('imageToPreview')),
 
-  setImage: function(data) {
-    this.setState({ imageToPreview: data });
+  fetchFiles: function(path) {
+    Service.getPath(path).then(this.setFilesList);
   },
 
   componentDidMount: function() {
-    history.listen(location => {
-      Service.getPath(location.query.path).then(this.setFilesList);
-    });
+    history.listen(location => this.fetchFiles(location.query.path));
     Streams.imageToPreview.onValue(this.setImage);
   },
 
