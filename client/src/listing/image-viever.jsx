@@ -9,7 +9,9 @@ export default React.createClass({
         <header className="image-viever__header">
           {R.compose(R.last, R.split('/'), decodeURIComponent)(this.props.imgSrc)}
         </header>
-        <img src={this.props.imgSrc} className="image-viever__image" />
+        <div className="image-viever__viewport">
+          <img src={this.props.imgSrc} className="image-viever__image" />
+        </div>
       </div>
     );
   },
