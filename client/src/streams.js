@@ -1,7 +1,7 @@
 import B from 'baconjs';
 import R from 'ramda';
 import S from './service';
-import history from './history';
+import history from './app-history';
 
 const buildPath = R.compose(R.join(''), R.prepend('?'), R.join('&'), R.map(R.join('=')));
 

@@ -4,7 +4,7 @@ import R from 'ramda';
 import List from 'material-ui/lib/lists/list';
 import Service from '../service';
 import Streams from '../streams';
-import history from '../history';
+import history from '../app-history';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
 

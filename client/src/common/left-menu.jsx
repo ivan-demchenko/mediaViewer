@@ -1,7 +1,7 @@
 import React from 'react';
 import LeftNav from 'material-ui/lib/left-nav';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import history from '../history';
+import history from '../app-history';
 
 export default React.createClass({
 
