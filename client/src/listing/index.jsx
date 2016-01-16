@@ -14,8 +14,13 @@ export default React.createClass({
     return { imageToPreview: null, files: null };
   },
 
-  setFilesList: R.compose(this.setState, R.objOf('files')),
-  setImage:     R.compose(this.setState, R.objOf('imageToPreview')),
+  setFilesList: function(files) {
+    this.setState(R.objOf('files', files));
+  },
+
+  setImage: function(img) {
+    this.setState(R.objOf('imageToPreview', img));
+  },
 
   fetchFiles: function(path) {
     Service.getPath(path).then(this.setFilesList);
