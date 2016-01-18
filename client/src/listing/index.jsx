@@ -39,7 +39,7 @@ export default React.createClass({
   },
 
   closePreviewRequested: function() {
-    S.listingProps.imageToPreview.push(null);
+    S.imageToPreview.push(null);
   },
 
   handleRequestChange: function(e, idx) {

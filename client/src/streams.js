@@ -3,10 +3,14 @@ import R from 'ramda';
 import S from './service';
 import H from './app-history';
 
-const KEY_LEFT = 37;
-const KEY_UP = 38;
-const KEY_RIGHT = 39;
-const KEY_DOWN = 40;
+const isLeft = R.equals(37);
+const isUp = R.equals(38);
+const isRight = R.equals(39);
+const isDown = R.equals(40);
+const isEnter = R.equals(13);
+const isEscape = R.equals(27);
+const isNext = R.anyPass([isRight, isDown]);
+const isPrev = R.anyPass([isLeft, isUp]);
 
 const pathToHistoryObj = x => {
   return { pathname: '/ls', search: '?path=' + x };
@@ -20,21 +24,18 @@ const listing = path
 .map(pathToHistoryObj)
 .doAction(H.push)
 .map(x => x.search.substr(6))
-.flatMap(R.compose(B.fromPromise, S.getPath))
+.flatMapLatest(R.compose(B.fromPromise, S.getPath))
 .toProperty([]);
 
-const globalKeyUp = B.fromEvent(window.document.body, 'keyup').doAction(e => e.preventDefault()).map('.which');
-const escKey = globalKeyUp.filter(R.equals(27));
-const enterKey = globalKeyUp.filter(R.equals(13));
-const upOrDown = globalKeyUp.filter(R.equals(KEY_LEFT)).map(-1)
-.merge(
-  globalKeyUp.filter(R.equals(KEY_RIGHT)).map(1)
-).startWith(0);
+const globalKeyUp = B.fromEvent(window.document.body, 'keyup').doAction(x => x.preventDefault()).map('.which');
+const escKey = globalKeyUp.filter(isEscape);
+const enterKey = globalKeyUp.filter(isEnter);
+const upAndDown = globalKeyUp.filter(isPrev).map(-1).merge(globalKeyUp.filter(isNext).map(1)).startWith(0);
 
 imageToPreview.plug(escKey.map(null).startWith(null));
 
 const selectedIndex = B.update(0,
-  [listing, upOrDown], (prev, list, inc) => {
+  [listing, upAndDown], (prev, list, inc) => {
     let max = list.length;
     let curr = prev + inc;
     return (curr > max ? 0 : (curr < 0 ? max : curr));
@@ -42,9 +43,7 @@ const selectedIndex = B.update(0,
 ).startWith(0);
 
 const nextItem = B.update(null,
-  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => {
-    return list[idx];
-  }
+  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => list[idx]
 ).changes().merge(tappedItem).onValue((nextOne) => {
   if (nextOne) {
     if (nextOne.isFile) {
