@@ -19,13 +19,16 @@ const pathToHistoryObj = x => {
 const imageToPreview = new B.Bus();
 const path = new B.Bus();
 const tappedItem = new B.Bus();
+const restoredPath = B.fromBinder((sink) => {
+  let unlisten = H.listen(x => {
+    sink(new B.Next(x.search.substr(6)));
+    sink(new B.End());
+    return () => unlisten();
+  });
+});
 
-const listing = path
-.map(pathToHistoryObj)
-.doAction(H.push)
-.map(x => x.search.substr(6))
-.flatMapLatest(R.compose(B.fromPromise, S.getPath))
-.toProperty([]);
+path.map(pathToHistoryObj).onValue(H.push);
+const listing = path.merge(restoredPath).flatMapLatest(R.compose(B.fromPromise, S.getPath)).toProperty([]);
 
 const globalKeyUp = B.fromEvent(window.document.body, 'keyup').doAction(x => x.preventDefault()).map('.which');
 const escKey = globalKeyUp.filter(isEscape);

@@ -20,22 +20,10 @@ export default React.createClass({
     };
   },
 
-  setFilesList: function(files) {
-    this.setState(R.objOf('files', files));
-  },
-
-  setImage: function(img) {
-    this.setState(R.objOf('imageToPreview', img));
-  },
-
-  setSelectedIndex: function(idx) {
-    this.setState(R.objOf('selectedIndex', idx));
-  },
-
   componentDidMount: function() {
-    this.unSubListing = S.listing.onValue(this.setFilesList);
-    this.unSubSelectedIndex = S.selectedIndex.onValue(this.setSelectedIndex);
-    this.unSubImageToPreview = S.imageToPreview.onValue(this.setImage);
+    this.unSubListing = S.listing.onValue(x => this.setState({ files: x }));
+    this.unSubSelectedIndex = S.selectedIndex.onValue(x => this.setState({ selectedIndex: x }));
+    this.unSubImageToPreview = S.imageToPreview.onValue(x => this.setState({ imageToPreview: x }));
   },
 
   componentWillUnmount: function() {
@@ -57,10 +45,15 @@ export default React.createClass({
       (x, i) => <ListItem key={i} value={i} primaryText={x.fileName} />
     );
 
+    const valueLinkSettings = {
+      value: this.state.selectedIndex,
+      requestChange: this.handleRequestChange
+    };
+
     return (
       <div>
         { this.state.files.length
-          ? <SelectableList valueLink={{value: this.state.selectedIndex, requestChange: this.handleRequestChange}}>
+          ? <SelectableList valueLink={valueLinkSettings}>
             { mapFilesToListItems(this.state.files) }
             </SelectableList>
           : null
