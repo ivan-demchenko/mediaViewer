@@ -5,13 +5,14 @@ html, body {
 
 .image-viever {
   position: fixed;
-  top: 0;
+  top: 64px;
   left: 0;
   bottom: 0;
   right: 0;
   background: rgba(0,0,0,.6);
   z-index: 11;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .image-viever__header {
@@ -20,9 +21,17 @@ html, body {
   width: 100%;
   z-index: 1;
   font-family: Roboto;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.image-viever__viewport {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .image-viever__image {
   max-width: 100%;
-  max-height: 100%;
 }

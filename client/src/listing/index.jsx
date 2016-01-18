@@ -2,59 +2,66 @@ import React from 'react';
 import B from 'baconjs';
 import R from 'ramda';
 import List from 'material-ui/lib/lists/list';
-import Service from '../service';
-import Streams from '../streams';
-import history from '../history';
+import ListItem from 'material-ui/lib/lists/list-item';
+import S from '../streams';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
+import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance';
+
+let SelectableList = SelectableContainerEnhance(List);
 
 export default React.createClass({
 
   getInitialState: function() {
-    return { imageToPreview: null, files: null };
-  },
-
-  setFilesList: R.compose(this.setState, R.objOf('files')),
-  setImage:     R.compose(this.setState, R.objOf('imageToPreview')),
-
-  fetchFiles: function(path) {
-    Service.getPath(path).then(this.setFilesList);
+    return {
+      files: [],
+      imageToPreview: null,
+      selectedIndex: 0
+    };
   },
 
   componentDidMount: function() {
-    history.listen(location => this.fetchFiles(location.query.path));
-    Streams.imageToPreview.onValue(this.setImage);
+    this.unSubListing = S.listing.onValue(x => this.setState({ files: x }));
+    this.unSubSelectedIndex = S.selectedIndex.onValue(x => this.setState({ selectedIndex: x }));
+    this.unSubImageToPreview = S.imageToPreview.onValue(x => this.setState({ imageToPreview: x }));
   },
 
-  handleEntityTap: function(entity) {
-    if (entity.isFile) {
-      Streams.imageToPreview.push('/api/photo?type=preview&path=' + entity.filePath + entity.fileName);
-    } else {
-      Streams.pathBus.push(entity.filePath + entity.fileName + '/');
-    }
+  componentWillUnmount: function() {
+    this.unSubListing();
+    this.unSubSelectedIndex();
+    this.unSubImageToPreview();
   },
 
   closePreviewRequested: function() {
-    Streams.imageToPreview.push(null);
+    S.imageToPreview.push(null);
   },
 
-  showImageToPreview: function() {
-    return this.state.imageToPreview
-      ? <ImageViever imgSrc={this.state.imageToPreview} closeRequested={this.closePreviewRequested} />
-      : null;
+  handleRequestChange: function(e, idx) {
+    S.tappedItem.push(this.state.files[idx]);
   },
 
   render: function() {
-    var mapFilesToListItems = function(items) {
-      return items.map(function(item, idx) {
-        return (<ListEntity key={idx} entity={item} tapHandler={this.handleEntityTap.bind(this, item)} />);
-      }.bind(this));
-    }.bind(this);
+    const mapFilesToListItems = (items) => items.map(
+      (x, i) => <ListItem key={i} value={i} primaryText={x.fileName} />
+    );
+
+    const valueLinkSettings = {
+      value: this.state.selectedIndex,
+      requestChange: this.handleRequestChange
+    };
 
     return (
       <div>
-        <List>{ this.state.files ? mapFilesToListItems(this.state.files) : null }</List>
-        { this.showImageToPreview() }
+        { this.state.files.length
+          ? <SelectableList valueLink={valueLinkSettings}>
+            { mapFilesToListItems(this.state.files) }
+            </SelectableList>
+          : null
+        }
+        { this.state.imageToPreview
+          ? <ImageViever imgSrc={this.state.imageToPreview} closeRequested={this.closePreviewRequested} />
+          : null
+        }
       </div>
     );
   },

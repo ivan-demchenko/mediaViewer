@@ -9,7 +9,10 @@ export default {
   },
 
   getPath: (path) => {
-    return fetch(`/api/ls?path=${path}`).then(toJson);
+    if (path) {
+      return fetch(`/api/ls?path=${path}`).then(toJson);
+    }
+    return new Promise((res) => res([]));
   },
 
 };
