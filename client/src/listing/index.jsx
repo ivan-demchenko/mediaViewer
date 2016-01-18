@@ -33,9 +33,15 @@ export default React.createClass({
   },
 
   componentDidMount: function() {
-    S.listing.onValue(this.setFilesList);
-    S.selectedIndex.onValue(this.setSelectedIndex);
-    S.imageToPreview.onValue(this.setImage);
+    this.unSubListing = S.listing.onValue(this.setFilesList);
+    this.unSubSelectedIndex = S.selectedIndex.onValue(this.setSelectedIndex);
+    this.unSubImageToPreview = S.imageToPreview.onValue(this.setImage);
+  },
+
+  componentWillUnmount: function() {
+    this.unSubListing();
+    this.unSubSelectedIndex();
+    this.unSubImageToPreview();
   },
 
   closePreviewRequested: function() {
