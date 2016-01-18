@@ -13,6 +13,7 @@ export default React.createClass({
   render: function() {
     return (
       <ListItem
+        value={this.props.value}
         primaryText={this.props.label}
         leftIcon={<FileFolder />}
         onTouchTap={this.handleTap} />

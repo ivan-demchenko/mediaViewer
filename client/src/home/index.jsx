@@ -16,7 +16,7 @@ export default React.createClass({
   },
 
   navigate: function(homeItem) {
-    Streams.pathBus.push(homeItem.basePath);
+    Streams.path.push(homeItem.basePath);
   },
 
   render: function() {
