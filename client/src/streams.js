@@ -1,4 +1,4 @@
-import { Bus, fromEvent, fromPromise, update } from 'baconjs';
+import { Bus, Next, End, fromBinder, fromEvent, fromPromise, update } from 'baconjs';
 import { compose, merge, objOf, concat, equals, anyPass } from 'ramda';
 import S from './service';
 import H from './app-history';
@@ -13,14 +13,17 @@ const isPrev = anyPass([equals(37), equals(38)]);
 const imageToPreview = new Bus();
 const path = new Bus();
 const tappedItem = new Bus();
-const restoredPath = new Bus();
-H.listen(x => {
-  if (x.pathname === '/ls') restoredPath.push(x.search.substr(6));
+const restoredPath = fromBinder((sink) => {
+  let unlisten = H.listen(x => {
+    sink(new Next(x.search.substr(6)));
+    sink(new End());
+    return () => unlisten();
+  });
 });
 
 path.map(toHistoryObj).onValue(H.push);
 
-const listing = path.merge(restoredPath).skipDuplicates().flatMapLatest(compose(fromPromise, S.getPath)).toProperty([]);
+const listing = path.merge(restoredPath).flatMapLatest(compose(fromPromise, S.getPath)).toProperty([]);
 const globalKeyUp = fromEvent(window.document.body, 'keyup').doAction(x => x.preventDefault()).map('.which');
 const escKey = globalKeyUp.filter(isEscape);
 const enterKey = globalKeyUp.filter(isEnter);
