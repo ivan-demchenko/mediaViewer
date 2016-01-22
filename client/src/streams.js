@@ -28,16 +28,16 @@ const upAndDown = globalKeyUp.filter(isPrev).map(-1).merge(globalKeyUp.filter(is
 
 imageToPreview.plug(escKey.map(null).startWith(null));
 
-const selectedIndex = update(0,
+const selectedIndex = update(1,
   [listing, upAndDown], (prev, list, inc) => {
-    let max = list.length - 1;
+    let max = list.length;
     let curr = prev + inc;
-    return (curr > max ? 0 : (curr < 0 ? max : curr));
+    return (curr > max ? 1 : (curr < 1 ? max : curr));
   }
-).startWith(0);
+).startWith(1);
 
 const nextItem = update(null,
-  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => list[idx]
+  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => list[idx-1]
 ).changes().merge(tappedItem).onValue((nextOne) => {
   if (nextOne) {
     if (nextOne.isFile) {

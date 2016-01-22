@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 export default React.createClass({
   render: function() {
     return (
-      <div>About</div>
+      <div>
+        <h1>Media View</h1>
+      </div>
     );
   }
 });
