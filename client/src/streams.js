@@ -1,52 +1,46 @@
-import B from 'baconjs';
-import R from 'ramda';
+import { Bus, Next, End, fromBinder, fromEvent, fromPromise, update } from 'baconjs';
+import { compose, merge, objOf, concat, equals, anyPass } from 'ramda';
 import S from './service';
 import H from './app-history';
 
-const isLeft = R.equals(37);
-const isUp = R.equals(38);
-const isRight = R.equals(39);
-const isDown = R.equals(40);
-const isEnter = R.equals(13);
-const isEscape = R.equals(27);
-const isNext = R.anyPass([isRight, isDown]);
-const isPrev = R.anyPass([isLeft, isUp]);
+const toHistoryObj = compose(merge({ pathname: '/ls' }), objOf('search'), concat('?path='));
 
-const pathToHistoryObj = x => {
-  return { pathname: '/ls', search: '?path=' + x };
-};
+const isEnter = equals(13);
+const isEscape = equals(27);
+const isNext = anyPass([equals(39), equals(40)]);
+const isPrev = anyPass([equals(37), equals(38)]);
 
-const imageToPreview = new B.Bus();
-const path = new B.Bus();
-const tappedItem = new B.Bus();
-const restoredPath = B.fromBinder((sink) => {
+const imageToPreview = new Bus();
+const path = new Bus();
+const tappedItem = new Bus();
+const restoredPath = fromBinder((sink) => {
   let unlisten = H.listen(x => {
-    sink(new B.Next(x.search.substr(6)));
-    sink(new B.End());
+    sink(new Next(x.search.substr(6)));
+    sink(new End());
     return () => unlisten();
   });
 });
 
-path.map(pathToHistoryObj).onValue(H.push);
-const listing = path.merge(restoredPath).flatMapLatest(R.compose(B.fromPromise, S.getPath)).toProperty([]);
+path.map(toHistoryObj).onValue(H.push);
 
-const globalKeyUp = B.fromEvent(window.document.body, 'keyup').doAction(x => x.preventDefault()).map('.which');
+const listing = path.merge(restoredPath).flatMapLatest(compose(fromPromise, S.getPath)).toProperty([]);
+const globalKeyUp = fromEvent(window.document.body, 'keyup').doAction(x => x.preventDefault()).map('.which');
 const escKey = globalKeyUp.filter(isEscape);
 const enterKey = globalKeyUp.filter(isEnter);
 const upAndDown = globalKeyUp.filter(isPrev).map(-1).merge(globalKeyUp.filter(isNext).map(1)).startWith(0);
 
 imageToPreview.plug(escKey.map(null).startWith(null));
 
-const selectedIndex = B.update(0,
+const selectedIndex = update(1,
   [listing, upAndDown], (prev, list, inc) => {
     let max = list.length;
     let curr = prev + inc;
-    return (curr > max ? 0 : (curr < 0 ? max : curr));
+    return (curr > max ? 1 : (curr < 1 ? max : curr));
   }
-).startWith(0);
+).startWith(1);
 
-const nextItem = B.update(null,
-  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => list[idx]
+const nextItem = update(null,
+  [listing, enterKey, selectedIndex], (prev, list, enter, idx) => list[idx-1]
 ).changes().merge(tappedItem).onValue((nextOne) => {
   if (nextOne) {
     if (nextOne.isFile) {

@@ -1,12 +1,12 @@
 import React from 'react';
-import B from 'baconjs';
-import R from 'ramda';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
-import S from '../streams';
+import Folder from 'material-ui/lib/svg-icons/file/folder';
+import Avatar from 'material-ui/lib/avatar';
+import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance';
 import ListEntity from './list-entity';
 import ImageViever from './image-viever';
-import { SelectableContainerEnhance } from 'material-ui/lib/hoc/selectable-enhance';
+import S from '../streams';
 
 let SelectableList = SelectableContainerEnhance(List);
 
@@ -37,12 +37,25 @@ export default React.createClass({
   },
 
   handleRequestChange: function(e, idx) {
-    S.tappedItem.push(this.state.files[idx]);
+    S.tappedItem.push(this.state.files[idx-1]);
   },
 
   render: function() {
+    const getPicPath = x => '/api/photo?type=thumb&path=' + encodeURIComponent(x.filePath + '/' + x.fileName)
+    const mapEntityToListItem = value => entity => entity.isFile
+      ? <ListItem
+        key={value}
+        value={value}
+        primaryText={entity.fileName}
+        leftAvatar={<Avatar src={getPicPath(entity)} />} />
+      : <ListItem
+        key={value}
+        value={value}
+        primaryText={entity.fileName}
+        leftIcon={<Folder />} />
+
     const mapFilesToListItems = (items) => items.map(
-      (x, i) => <ListItem key={i} value={i} primaryText={x.fileName} />
+      (x, i) => mapEntityToListItem(i+1)(x)
     );
 
     const valueLinkSettings = {

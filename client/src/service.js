@@ -1,6 +1,6 @@
-import R from 'ramda';
+import { invoker } from 'ramda';
 
-const toJson = R.invoker(0, 'json');
+const toJson = invoker(0, 'json');
 
 export default {
 
