@@ -1,5 +1,5 @@
 import React from 'react';
-import R from 'ramda';
+import { compose, objOf, map } from 'ramda';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import service from '../service';
@@ -12,7 +12,7 @@ export default React.createClass({
   },
 
   componentDidMount: function() {
-    service.getHomeItems().then(R.compose(this.setState.bind(this), R.objOf('items')));
+    service.getHomeItems().then(compose(this.setState.bind(this), objOf('items')));
   },
 
   navigate: function(homeItem) {
@@ -21,7 +21,7 @@ export default React.createClass({
 
   render: function() {
 
-    const itemToListItems = R.map((i) => <ListItem
+    const itemToListItems = map((i) => <ListItem
       key={Math.random()}
       primaryText={i.label}
       onTouchTap={this.navigate.bind(this, i)}

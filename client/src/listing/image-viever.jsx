@@ -1,16 +1,20 @@
 import React from 'react';
-import R from 'ramda';
+import { compose, last, split } from 'ramda';
 
 export default React.createClass({
 
   render: function() {
     return (
-      <div onClick={this.props.closeRequested} className="image-viever">
+      <div
+        onClick={this.props.closeRequested}
+        className="image-viever">
         <header className="image-viever__header">
-          {R.compose(R.last, R.split('/'), decodeURIComponent)(this.props.imgSrc)}
+          {compose(last, split('/'), decodeURIComponent)(this.props.imgSrc)}
         </header>
         <div className="image-viever__viewport">
-          <img src={this.props.imgSrc} className="image-viever__image" />
+          <img
+            src={this.props.imgSrc}
+            className="image-viever__image" />
         </div>
       </div>
     );
